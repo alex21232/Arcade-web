@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar Camiseta - FútbolShop{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        Editar Camiseta: {{ object.nombre }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Por favor corrige los siguientes errores:</strong>
+                            <ul class="mb-0">
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ field.label }}: {{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        <div class="row">
+                            <!-- Nombre -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.nombre.id_for_label }}" class="form-label">
+                                    <i class="fas fa-tag me-1"></i>Nombre de la Camiseta *
+                                </label>
+                                {{ form.nombre }}
+                                {% if form.nombre.help_text %}
+                                <div class="form-text">{{ form.nombre.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Equipo -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.equipo.id_for_label }}" class="form-label">
+                                    <i class="fas fa-users me-1"></i>Equipo *
+                                </label>
+                                {{ form.equipo }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Temporada -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.temporada.id_for_label }}" class="form-label">
+                                    <i class="fas fa-calendar me-1"></i>Temporada *
+                                </label>
+                                {{ form.temporada }}
+                            </div>
+
+                            <!-- Talla -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.talla.id_for_label }}" class="form-label">
+                                    <i class="fas fa-tshirt me-1"></i>Talla *
+                                </label>
+                                {{ form.talla }}
+                            </div>
+                        </div>
+
+                        <!-- Precio -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.precio.id_for_label }}" class="form-label">
+                                    <i class="fas fa-dollar-sign me-1"></i>Precio *
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    {{ form.precio }}
+                                </div>
+                            </div>
+
+                            <!-- Estado -->
+                            <div class="col-md-6 mb-3">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-check form-switch mt-3">
+                                            {{ form.publicado }}
+                                            <label class="form-check-label" for="{{ form.publicado.id_for_label }}">
+                                                <i class="fas fa-eye me-1"></i>Publicado
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check form-switch mt-3">
+                                            {{ form.vendido }}
+                                            <label class="form-check-label" for="{{ form.vendido.id_for_label }}">
+                                                <i class="fas fa-check-circle me-1"></i>Vendido
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-3">
+                            <label for="{{ form.descripcion.id_for_label }}" class="form-label">
+                                <i class="fas fa-align-left me-1"></i>Descripción
+                            </label>
+                            {{ form.descripcion }}
+                            <div class="form-text">Describe las características de la camiseta.</div>
+                        </div>
+
+                        <!-- Imagen Actual -->
+                        {% if object.imagen %}
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <i class="fas fa-image me-1"></i>Imagen Actual
+                            </label>
+                            <div class="current-image">
+                                <img src="{{ object.imagen.url }}" alt="{{ object.nombre }}" 
+                                     class="img-thumbnail" style="max-height: 200px;">
+                                <div class="form-text mt-2">Imagen actual de la camiseta</div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Nueva Imagen -->
+                        <div class="mb-4">
+                            <label for="{{ form.imagen.id_for_label }}" class="form-label">
+                                <i class="fas fa-camera me-1"></i>
+                                {% if object.imagen %}Cambiar Imagen{% else %}Imagen de la Camiseta{% endif %}
+                            </label>
+                            {{ form.imagen }}
+                            {% if form.imagen.help_text %}
+                            <div class="form-text">{{ form.imagen.help_text }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Información de la Camiseta -->
+                        <div class="alert alert-info">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-info-circle me-1"></i>Información de la Camiseta
+                            </h6>
+                            <div class="row small">
+                                <div class="col-md-6">
+                                    <strong>ID:</strong> {{ object.id }}<br>
+                                    <strong>Creado:</strong> {{ object.fecha_creacion|date:"d/m/Y H:i" }}
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Modificado:</strong> {{ object.fecha_actualizacion|date:"d/m/Y H:i" }}<br>
+                                    <strong>Estado:</strong> 
+                                    <span class="badge {% if object.publicado %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {{ object.publicado|yesno:"Publicado,No publicado" }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <a href="{% url 'lista_productos' %}" class="btn btn-secondary me-2">
+                                    <i class="fas fa-arrow-left me-1"></i>Volver
+                                </a>
+                                <a href="{% url 'camiseta_detail' object.pk %}" class="btn btn-info">
+                                    <i class="fas fa-eye me-1"></i>Ver Detalles
+                                </a>
+                            </div>
+                            <div>
+                                <a href="{% url 'camiseta_delete' object.pk %}" class="btn btn-danger me-2">
+                                    <i class="fas fa-trash me-1"></i>Eliminar
+                                </a>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-save me-1"></i>Guardar Cambios
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e9ecef;
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #ffc107;
+        box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+        outline: none;
+    }
+    
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    .form-check-input:checked {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .card {
+        border: none;
+        border-radius: 1rem;
+    }
+    
+    .card-header {
+        border-radius: 1rem 1rem 0 0 !important;
+        background: linear-gradient(45deg, #ffc107, #ffb300) !important;
+    }
+    
+    .btn-warning {
+        background: linear-gradient(45deg, #ffc107, #ffb300);
+        border: none;
+        padding: 0.75rem 2rem;
+        font-weight: 600;
+        color: #212529;
+    }
+    
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+        color: #212529;
+    }
+    
+    .current-image {
+        text-align: center;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        border: 2px dashed #dee2e6;
+    }
+    
+    .img-thumbnail {
+        border: 3px solid #dee2e6;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+        
+        // Validación de campos requeridos
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            let firstInvalidField = null;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = '#dc3545';
+                    
+                    if (!firstInvalidField) {
+                        firstInvalidField = field;
+                    }
+                } else {
+                    field.style.borderColor = '#28a745';
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Por favor completa todos los campos obligatorios marcados con *');
+                if (firstInvalidField) {
+                    firstInvalidField.focus();
+                }
+            }
+        });
+        
+        // Restablecer color del borde cuando el usuario escribe
+        requiredFields.forEach(field => {
+            field.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    this.style.borderColor = '#28a745';
+                }
+            });
+        });
+        
+        // Previsualización de nueva imagen
+        const imageInput = document.getElementById('{{ form.imagen.id_for_label }}');
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Aquí podrías agregar previsualización de la nueva imagen
+                    console.log('Nueva imagen seleccionada:', file.name);
+                    
+                    // Mostrar mensaje de que se cambiará la imagen
+                    if (document.querySelector('.current-image')) {
+                        const currentImageDiv = document.querySelector('.current-image');
+                        currentImageDiv.innerHTML += `
+                            <div class="alert alert-warning mt-2 small">
+                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                La imagen actual será reemplazada
+                            </div>
+                        `;
+                    }
+                }
+            });
+        }
+        
+        // Confirmación antes de eliminar
+        const deleteBtn = document.querySelector('.btn-danger');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function(e) {
+                if (!confirm('¿Estás seguro de que quieres eliminar esta camiseta? Esta acción no se puede deshacer.')) {
+                    e.preventDefault();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

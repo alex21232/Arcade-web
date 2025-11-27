@@ -1,3 +1,7 @@
+{% extends 'includes/navbar.html'%}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -71,13 +75,73 @@
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
+            transition: background-color 0.3s;
         }
         .back-button:hover {
             background-color: #2980b9;
         }
+        .action-buttons {
+            margin-top: 30px;
+            text-align: center;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .btn-comprar {
+            background-color: #27ae60;
+            color: white;
+        }
+        .btn-comprar:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+        }
+        .btn-editar {
+            background-color: #f39c12;
+            color: white;
+        }
+        .btn-editar:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+        .btn-vendido {
+            background-color: #95a5a6;
+            color: white;
+            cursor: not-allowed;
+        }
+        .btn-eliminar {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-eliminar:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
+        }
         @media (max-width: 768px) {
             .camiseta-content {
                 grid-template-columns: 1fr;
+            }
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
             }
         }
     </style>
@@ -85,7 +149,9 @@
 <body>
     <div class="camiseta-container">
         <!-- Botón para volver -->
-        <a href="{% url 'lista_productos' %}" class="back-button">← Volver a la lista</a>
+        <a href="{% url 'lista_productos' %}" class="back-button">
+            <i class="fas fa-arrow-left"></i> Volver a la lista
+        </a>
         
         <div class="camiseta-header">
             <h1>{{ camiseta.nombre }}</h1>
@@ -93,13 +159,19 @@
             <!-- Estados -->
             <div style="margin-bottom: 20px;">
                 {% if camiseta.publicado %}
-                    <span class="estado publicado">Publicado</span>
+                    <span class="estado publicado">
+                        <i class="fas fa-eye"></i> Publicado
+                    </span>
                 {% else %}
-                    <span class="estado no-publicado">No publicado</span>
+                    <span class="estado no-publicado">
+                        <i class="fas fa-eye-slash"></i> No publicado
+                    </span>
                 {% endif %}
                 
                 {% if camiseta.vendido %}
-                    <span class="estado vendido">Vendido</span>
+                    <span class="estado vendido">
+                        <i class="fas fa-check-circle"></i> Vendido
+                    </span>
                 {% endif %}
             </div>
         </div>
@@ -110,8 +182,9 @@
                 {% if camiseta.imagen %}
                     <img src="{{ camiseta.imagen.url }}" alt="{{ camiseta.nombre }}" class="camiseta-image">
                 {% else %}
-                    <div style="background: #f8f9fa; padding: 100px; text-align: center; border-radius: 8px;">
-                        Imagen no disponible
+                    <div style="background: #f8f9fa; padding: 100px; text-align: center; border-radius: 8px; color: #6c757d;">
+                        <i class="fas fa-tshirt fa-3x mb-3"></i>
+                        <br>Imagen no disponible
                     </div>
                 {% endif %}
             </div>
@@ -119,54 +192,132 @@
             <!-- Información de la camiseta -->
             <div class="camiseta-info">
                 <div class="camiseta-field">
-                    <strong>Equipo:</strong>
+                    <strong><i class="fas fa-users"></i> Equipo:</strong>
                     <span>{{ camiseta.equipo }}</span>
                 </div>
                 
                 <div class="camiseta-field">
-                    <strong>Temporada:</strong>
+                    <strong><i class="fas fa-calendar"></i> Temporada:</strong>
                     <span>{{ camiseta.temporada }}</span>
                 </div>
                 
                 <div class="camiseta-field">
-                    <strong>Talla:</strong>
+                    <strong><i class="fas fa-tshirt"></i> Talla:</strong>
                     <span>{{ camiseta.get_talla_display }}</span>
                 </div>
                 
                 <div class="camiseta-field precio">
-                    <strong>Precio:</strong>
+                    <strong><i class="fas fa-dollar-sign"></i> Precio:</strong>
                     <span>${{ camiseta.precio }}</span>
                 </div>
                 
                 <div class="camiseta-field">
-                    <strong>Descripción:</strong>
-                    <p style="margin-top: 10px;">{{ camiseta.descripcion }}</p>
+                    <strong><i class="fas fa-align-left"></i> Descripción:</strong>
+                    <p style="margin-top: 10px; line-height: 1.6;">{{ camiseta.descripcion }}</p>
                 </div>
                 
                 <div class="camiseta-field">
-                    <strong>Fecha creación:</strong>
+                    <strong><i class="fas fa-calendar-plus"></i> Fecha creación:</strong>
                     <span>{{ camiseta.fecha_creacion|date:"d/m/Y H:i" }}</span>
                 </div>
                 
                 <div class="camiseta-field">
-                    <strong>Última actualización:</strong>
+                    <strong><i class="fas fa-edit"></i> Última actualización:</strong>
                     <span>{{ camiseta.fecha_actualizacion|date:"d/m/Y H:i" }}</span>
                 </div>
             </div>
         </div>
 
         <!-- Botones de acción -->
-        <div style="margin-top: 30px; text-align: center;">
+        <div class="action-buttons">
             {% if not camiseta.vendido and camiseta.publicado %}
-                <button style="padding: 12px 30px; background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">
-                    Comprar ahora
+                <button class="btn btn-comprar">
+                    <i class="fas fa-shopping-cart"></i> Comprar ahora
                 </button>
             {% elif camiseta.vendido %}
-                <button style="padding: 12px 30px; background-color: #95a5a6; color: white; border: none; border-radius: 5px; cursor: not-allowed; font-size: 16px;" disabled>
-                    Producto vendido
+                <button class="btn btn-vendido" disabled>
+                    <i class="fas fa-times-circle"></i> Producto vendido
                 </button>
             {% endif %}
+            
+            <!-- BOTÓN DE ACTUALIZAR/EDITAR - SIEMPRE VISIBLE PARA STAFF -->
+            
+                <a href="{% url 'camiseta_update' camiseta.pk %}" class="btn btn-editar">
+                    <i class="fas fa-edit"></i> Actualizar/Editar
+                </a>
+                
+                <!-- Botón de eliminar -->
+                <a href="{% url 'camiseta_delete' camiseta.pk %}" class="btn btn-eliminar" 
+                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta camiseta? Esta acción no se puede deshacer.')">
+                    <i class="fas fa-trash"></i> Eliminar
+                </a>
+            
         </div>
+
+        <!-- Información adicional para staff -->
+        {% if user.is_authenticated and user.is_staff %}
+        <div style="margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
+            <h4 style="margin-bottom: 15px; color: #007bff;">
+                <i class="fas fa-tools"></i> Información para Administradores
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
+                    <strong>ID:</strong> {{ camiseta.id }}
+                </div>
+                <div>
+                    <strong>Creado por:</strong> 
+                    {% if camiseta.creado_por %}
+                        {{ camiseta.creado_por.username }}
+                    {% else %}
+                        Sistema
+                    {% endif %}
+                </div>
+                <div>
+                    <strong>Última modificación:</strong> 
+                    {% if camiseta.modificado_por %}
+                        {{ camiseta.modificado_por.username }}
+                    {% else %}
+                        No especificado
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
+
+    <script>
+        // Confirmación para acciones importantes
+        document.addEventListener('DOMContentLoaded', function() {
+            // Confirmación para eliminar (ya está en el onclick del enlace)
+            
+            // Animación para los botones
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    if (!this.disabled) {
+                        this.style.transform = 'translateY(-2px)';
+                        this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                    }
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    if (!this.disabled) {
+                        this.style.transform = 'translateY(0)';
+                        this.style.boxShadow = 'none';
+                    }
+                });
+            });
+            
+            // Función para comprar (placeholder)
+            const buyButton = document.querySelector('.btn-comprar');
+            if (buyButton) {
+                buyButton.addEventListener('click', function() {
+                    alert('Función de compra en desarrollo. Próximamente disponible.');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
+
+{% endblock %}

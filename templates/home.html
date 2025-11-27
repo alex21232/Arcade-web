@@ -1,122 +1,285 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Camisetas</title>
-    <style>
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .camiseta-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .camiseta-table th,
-        .camiseta-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .camiseta-table th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-        
-        .camiseta-table tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .nombre-link {
-            color: #2c3e50;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .nombre-link:hover {
-            color: #3498db;
-            text-decoration: underline;
-        }
-        
-        .precio {
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-        
-        .mini-imagen {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
+{% extends 'includes/navbar.html' %}
+{% load static %}
+
+{% block title %}Inicio - FútbolShop - Camisetas Oficiales{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-dark text-white py-5">
     <div class="container">
-        <h1>Lista de Camisetas</h1>
-        
-        {% if Camisetas %}
-            <table class="camiseta-table">
-                <thead>
-                    <tr>
-                        <th>Imagen</th>
-                        <th>Nombre</th>
-                        <th>Equipo</th>
-                        <th>Temporada</th>
-                        <th>Talla</th>
-                        <th>Precio</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for camiseta in Camisetas %}
-                    <tr>
-                        <td>
-                            {% if camiseta.imagen %}
-                                <img src="{{ camiseta.imagen.url }}" alt="{{ camiseta.nombre }}" class="mini-imagen">
-                            {% else %}
-                                <span style="color: #999;">-</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{% url 'camiseta_detail' camiseta.pk %}" class="nombre-link">
-                                {{ camiseta.nombre }}
-                            </a>
-                        </td>
-                        <td>{{ camiseta.equipo }}</td>
-                        <td>{{ camiseta.temporada }}</td>
-                        <td>{{ camiseta.get_talla_display }}</td>
-                        <td class="precio">${{ camiseta.precio }}</td>
-                        <td>
-                            {% if camiseta.vendido %}
-                                <span style="color: #e74c3c;">Vendido</span>
-                            {% elif not camiseta.publicado %}
-                                <span style="color: #f39c12;">No publicado</span>
-                            {% else %}
-                                <span style="color: #27ae60;">Disponible</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <div class="empty-state">
-                <p>No hay artículos disponibles</p>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">
+                    Las Mejores <span class="text-warning">Camisetas</span> de Fútbol
+                </h1>
+                <p class="lead mb-4">
+                    Descubre nuestra colección exclusiva de camisetas oficiales de los equipos más importantes del mundo. 
+                    Calidad garantizada y envíos a todo el país.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{% url 'lista_productos' %}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Ver Colección
+                    </a>
+                    {% if user.is_staff %}
+                    <a href="{% url 'camiseta_create' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-plus me-2"></i>Agregar Camiseta
+                    </a>
+                    {% endif %}
+                </div>
             </div>
-        {% endif %}
+            <div class="col-lg-6 text-center">
+                <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                     alt="Camisetas de fútbol" class="img-fluid rounded-3 shadow-lg">
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</section>
+
+<!-- Estadísticas -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <i class="fas fa-tshirt fa-3x text-primary mb-3"></i>
+                    <h3 class="fw-bold">{{ total_camisetas }}</h3>
+                    <p class="text-muted">Camisetas Disponibles</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <i class="fas fa-users fa-3x text-success mb-3"></i>
+                    <h3 class="fw-bold">{{ total_equipos }}</h3>
+                    <p class="text-muted">Equipos Diferentes</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <i class="fas fa-truck fa-3x text-info mb-3"></i>
+                    <h3 class="fw-bold">24/7</h3>
+                    <p class="text-muted">Envíos Express</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="stat-card">
+                    <i class="fas fa-star fa-3x text-warning mb-3"></i>
+                    <h3 class="fw-bold">4.9/5</h3>
+                    <p class="text-muted">Calificación</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Camisetas Destacadas -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col">
+                <h2 class="text-center fw-bold mb-3">Camisetas Destacadas</h2>
+                <p class="text-center text-muted lead">Las camisetas más populares de nuestra colección</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            {% for camiseta in Camisetas %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="position-relative">
+                        {% if camiseta.imagen %}
+                        <img src="{{ camiseta.imagen.url }}" class="card-img-top" alt="{{ camiseta.nombre }}" style="height: 250px; object-fit: cover;">
+                        {% else %}
+                        <img src="https://images.unsplash.com/photo-1521334884684-d80222895322?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                             class="card-img-top" alt="Camiseta default" style="height: 250px; object-fit: cover;">
+                        {% endif %}
+                        {% if camiseta.vendido %}
+                        <span class="position-absolute top-0 start-0 m-2 badge bg-danger">Vendido</span>
+                        {% elif not camiseta.publicado %}
+                        <span class="position-absolute top-0 start-0 m-2 badge bg-secondary">No publicado</span>
+                        {% else %}
+                        <span class="position-absolute top-0 start-0 m-2 badge bg-success">Disponible</span>
+                        {% endif %}
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ camiseta.nombre }}</h5>
+                        <p class="card-text text-muted">{{ camiseta.equipo }} - {{ camiseta.temporada }}</p>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 text-primary mb-0">${{ camiseta.precio }}</span>
+                                <span class="badge bg-light text-dark border">{{ camiseta.talla }}</span>
+                            </div>
+                            <div class="d-grid gap-2 mt-3">
+                                <a href="{% url 'camiseta_detail' camiseta.pk %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i>Ver Detalles
+                                </a>
+                                {% if user.is_staff %}
+                                <a href="{% url 'camiseta_update' camiseta.pk %}" class="btn btn-outline-warning btn-sm">
+                                    <i class="fas fa-edit me-1"></i>Editar
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-tshirt fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No hay camisetas destacadas</h4>
+                <p class="text-muted">Agrega algunas camisetas para que aparezcan aquí.</p>
+                {% if user.is_staff %}
+                <a href="{% url 'camiseta_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Agregar Primera Camiseta
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'lista_productos' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-list me-2"></i>Ver Todas las Camisetas
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Categorías -->
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Encuentra por Categoría</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <div class="category-icon bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 80px; height: 80px;">
+                        <i class="fas fa-trophy fa-2x"></i>
+                    </div>
+                    <h4>Ligas Top</h4>
+                    <p class="text-muted">Premier League, La Liga, Serie A, Bundesliga</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <div class="category-icon bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 80px; height: 80px;">
+                        <i class="fas fa-globe-americas fa-2x"></i>
+                    </div>
+                    <h4>Selecciones</h4>
+                    <p class="text-muted">Camisetas nacionales de todo el mundo</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <div class="category-icon bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                         style="width: 80px; height: 80px;">
+                        <i class="fas fa-history fa-2x"></i>
+                    </div>
+                    <h4>Ediciones Especiales</h4>
+                    <p class="text-muted">Third kits y ediciones retro</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h3 class="fw-bold">¡No te pierdas las novedades!</h3>
+                <p class="mb-0">Suscríbete para recibir ofertas exclusivas y nuevos lanzamientos.</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group input-group-lg">
+                    <input type="email" class="form-control" placeholder="Tu correo electrónico">
+                    <button class="btn btn-warning" type="button">
+                        <i class="fas fa-paper-plane me-1"></i>Suscribirse
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 50%, #34495e 100%);
+    }
+    
+    .stat-card {
+        padding: 2rem 1rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 1rem;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    }
+    
+    .category-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .category-icon:hover {
+        transform: scale(1.1);
+    }
+    
+    .btn {
+        border-radius: 0.75rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animación de contadores (si se implementan)
+        const counters = document.querySelectorAll('.stat-card h3');
+        counters.forEach(counter => {
+            const target = parseInt(counter.textContent);
+            if (!isNaN(target)) {
+                animateCounter(counter, target);
+            }
+        });
+        
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 20);
+        }
+        
+        // Smooth scroll para botones
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

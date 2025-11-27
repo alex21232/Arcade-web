@@ -1,0 +1,353 @@
+{% extends 'includes/navbar.html' %}
+
+{% block title %}Eliminar Camiseta - MiTienda{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Variables y estilos */
+        :root {
+            --primary: #DC0A2D;
+            --primary-dark: #A0051C;
+            --primary-light: #FF3B5C;
+            --accent: #FFCB05;
+            --dark: #1E1E1E;
+            --light: #F5F5F5;
+            --gray: #6C757D;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --border-radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .delete-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .delete-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            text-align: center;
+            border-top: 5px solid var(--danger);
+        }
+
+        .warning-icon {
+            font-size: 4rem;
+            color: var(--danger);
+            margin-bottom: 1.5rem;
+        }
+
+        .delete-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .delete-subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .product-preview {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #e9ecef;
+        }
+
+        .product-info h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .detail-item {
+            text-align: center;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .warning-message {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .warning-message i {
+            color: var(--warning);
+            margin-right: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid var(--gray);
+        }
+
+        .btn-outline:hover {
+            background: var(--light);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .delete-container {
+                margin: 1rem auto;
+            }
+
+            .delete-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .delete-title {
+                font-size: 1.7rem;
+            }
+
+            .product-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .delete-title {
+                font-size: 1.5rem;
+            }
+
+            .product-details {
+                grid-template-columns: 1fr;
+            }
+
+            .warning-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="delete-container">
+        <div class="delete-card">
+            <!-- Icono de advertencia -->
+            <div class="warning-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+
+            <!-- Título y descripción -->
+            <h1 class="delete-title">Eliminar Camiseta</h1>
+            <p class="delete-subtitle">
+                Estás a punto de eliminar permanentemente esta camiseta del sistema. 
+                Esta acción no se puede deshacer.
+            </p>
+
+            <!-- Información de la camiseta a eliminar -->
+            <div class="product-preview">
+                <div class="product-header">
+                    {% if camiseta.imagen %}
+                        <img src="{{ camiseta.imagen.url }}" alt="{{ camiseta.nombre }}" class="product-image">
+                    {% else %}
+                        <div class="product-image" style="background: #e9ecef; display: flex; align-items: center; justify-content: center; color: var(--gray);">
+                            <i class="fas fa-tshirt" style="font-size: 2rem;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="product-info">
+                        <h3>{{ camiseta.nombre }}</h3>
+                        <p><strong>Equipo:</strong> {{ camiseta.equipo }}</p>
+                        <p><strong>Temporada:</strong> {{ camiseta.temporada }}</p>
+                    </div>
+                </div>
+
+                <div class="product-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Talla</div>
+                        <div class="detail-value">{{ camiseta.talla }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Precio</div>
+                        <div class="detail-value">${{ camiseta.precio }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Estado</div>
+                        <div class="detail-value">
+                            {% if camiseta.vendido %}
+                                <span style="color: var(--danger);">Vendida</span>
+                            {% elif camiseta.publicado %}
+                                <span style="color: var(--success);">Publicada</span>
+                            {% else %}
+                                <span style="color: var(--warning);">No Publicada</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mensaje de advertencia -->
+            <div class="warning-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <strong>¡Atención!</strong> Esta acción eliminará permanentemente la camiseta y toda su información.
+            </div>
+
+            <!-- Formulario de eliminación -->
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="button-group">
+                    <!-- Botón de confirmación -->
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>
+                        Sí, Eliminar Camiseta
+                    </button>
+
+                    <!-- Botón de cancelar -->
+                    <a href="{% url 'lista_productos' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+
+            <!-- Información adicional -->
+            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e9ecef;">
+                <p style="font-size: 0.9rem; color: var(--gray); text-align: center;">
+                    <i class="fas fa-info-circle"></i>
+                    Si la camiseta ha sido vendida, considera marcarla como "Vendida" en lugar de eliminarla.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Confirmación adicional antes de enviar el formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteForm = document.querySelector('form');
+            const deleteButton = document.querySelector('.btn-danger');
+
+            deleteButton.addEventListener('click', function(e) {
+                if (!confirm('¿Estás completamente seguro de que deseas eliminar esta camiseta?\n\nEsta acción es irreversible.')) {
+                    e.preventDefault();
+                }
+            });
+
+            // Prevenir envío múltiple del formulario
+            deleteForm.addEventListener('submit', function(e) {
+                const submitButton = deleteForm.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando...';
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

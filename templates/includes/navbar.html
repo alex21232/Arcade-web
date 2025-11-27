@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -40,6 +41,31 @@
             color: #2c3e50;
             font-weight: 500;
         }
+        .futbol-icon {
+            color: #ff6b00;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-5px);}
+            60% {transform: translateY(-3px);}
+        }
+        .logout-form {
+            display: inline;
+        }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            padding: 0;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+        .logout-btn:hover {
+            color: #c82333;
+            background: none;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
@@ -47,9 +73,9 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <!-- Logo -->
+            <!-- Logo con bola de fútbol -->
             <a class="navbar-brand" href="#">
-                <i class="fas fa-futbol me-2"></i>
+                <i class="fas fa-futbol futbol-icon me-2"></i>
                 <span class="logo-text">Fútbol</span>Shop
             </a>
 
@@ -62,25 +88,27 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}" href="#">
                             <i class="fas fa-home me-1"></i>Inicio
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'camisetas' %}active{% endif %}" href="#">
                             <i class="fas fa-tshirt me-1"></i>Camisetas
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-tags me-1"></i>Ofertas
+                        <a class="nav-link {% if request.resolver_match.url_name == 'camisetas' %}active{% endif %}" href="{% url 'camiseta_create' %}">
+                            <i class="fas fa-tshirt me-1"></i>Crear
                         </a>
                     </li>
+                    {% if user.is_authenticated and user.is_staff %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-info-circle me-1"></i>Nosotros
+                        <a class="nav-link {% if request.resolver_match.url_name == 'crear_camiseta' %}active{% endif %}" href="{% url ' camiseta_create ' %}">
+                            <i class="fas fa-plus me-1"></i>Crear
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
 
                 <!-- Elementos de autenticación -->
@@ -104,30 +132,28 @@
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
-                                {% if user.is_staff %}
+                                
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <a class="dropdown-item" href="{% url 'crear_camiseta' %}">
                                         <i class="fas fa-plus me-2"></i>Agregar Camiseta
                                     </a>
                                 </li>
-                                {% endif %}
+                                
                                 <li>
-                                    <a class="dropdown-item text-danger" href="#">
-                                        <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-                                    </a>
+                                    <form method="post" action="{% url 'logout' %}" class="logout-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item logout-btn">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                                        </button>
+                                    </form>
                                 </li>
                             </ul>
                         </li>
                     {% else %}
                         <!-- Usuario no autenticado -->
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fas fa-sign-in-alt me-1"></i>Iniciar Sesión
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-custom ms-2" href="#">
-                                <i class="fas fa-user-plus me-1"></i>Registrarse
+                            <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="#">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
                             </a>
                         </li>
                     {% endif %}
@@ -148,6 +174,8 @@
         </div>
     </nav>
 
+    {% block content %}
+    {% endblock %}
     <!-- Mensajes -->
     {% if messages %}
     <div class="container mt-3">
@@ -160,12 +188,6 @@
     </div>
     {% endif %}
 
-    <!-- Contenido principal -->
-    <main>
-        {% block content %}
-        <!-- El contenido específico de cada página irá aquí -->
-        {% endblock %}
-    </main>
 
     <!-- Footer básico -->
     <footer class="bg-dark text-light mt-5 py-4">
@@ -179,3 +201,4 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
+
