@@ -1,6 +1,6 @@
 {% extends 'includes/navbar.html' %}
 
-{% block title %}Eliminar Camiseta - MiTienda{% endblock %}
+{% block title %}Eliminar Juego - GameTrade{% endblock %}
 
 {% block content %}
 <!DOCTYPE html>
@@ -9,21 +9,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Variables y estilos */
+        /* Variables y estilos - Temática Gaming */
         :root {
-            --primary: #DC0A2D;
-            --primary-dark: #A0051C;
-            --primary-light: #FF3B5C;
-            --accent: #FFCB05;
-            --dark: #1E1E1E;
-            --light: #F5F5F5;
-            --gray: #6C757D;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
+            --primary: #1a1a2e;
+            --primary-dark: #0f3460;
+            --primary-light: #16213e;
+            --accent: #00adb5;
+            --accent-light: #00fff5;
+            --dark: #0d0d0d;
+            --light: #f5f5f5;
+            --gray: #8b8b8b;
+            --success: #00ff88;
+            --warning: #ffbb33;
+            --danger: #ff5252;
+            --danger-dark: #ff0000;
             --border-radius: 12px;
-            --shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             --transition: all 0.3s ease;
+            --neon-glow: 0 0 10px var(--accent-light), 0 0 20px var(--accent-light), 0 0 30px var(--accent-light);
         }
 
         * {
@@ -32,32 +35,47 @@
             box-sizing: border-box;
         }
 
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--light);
+        }
+
         .delete-container {
-            max-width: 600px;
-            margin: 2rem auto;
+            max-width: 700px;
+            margin: 3rem auto;
             padding: 0 20px;
         }
 
         .delete-card {
-            background: white;
+            background: rgba(26, 26, 46, 0.9);
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             padding: 2.5rem;
             text-align: center;
+            border: 1px solid rgba(0, 173, 181, 0.3);
             border-top: 5px solid var(--danger);
+            backdrop-filter: blur(10px);
         }
 
         .warning-icon {
             font-size: 4rem;
             color: var(--danger);
             margin-bottom: 1.5rem;
+            text-shadow: 0 0 15px var(--danger-dark);
         }
 
         .delete-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark);
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--light);
             margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, var(--light), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .delete-subtitle {
@@ -67,89 +85,128 @@
             line-height: 1.6;
         }
 
-        .product-preview {
-            background: var(--light);
+        .game-preview {
+            background: rgba(15, 52, 96, 0.3);
             border-radius: var(--border-radius);
             padding: 1.5rem;
             margin: 2rem 0;
             text-align: left;
+            border: 1px solid rgba(0, 173, 181, 0.2);
         }
 
-        .product-header {
+        .game-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .product-image {
-            width: 80px;
-            height: 80px;
+        .game-image {
+            width: 100px;
+            height: 120px;
             border-radius: 8px;
             object-fit: cover;
-            border: 2px solid #e9ecef;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 10px rgba(0, 173, 181, 0.5);
         }
 
-        .product-info h3 {
-            font-size: 1.3rem;
+        .game-info h3 {
+            font-size: 1.4rem;
             font-weight: 600;
-            color: var(--dark);
+            color: var(--light);
             margin-bottom: 0.5rem;
         }
 
-        .product-details {
+        .game-info p {
+            color: var(--accent-light);
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .game-details {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1rem;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .detail-item {
             text-align: center;
-            padding: 0.8rem;
-            background: white;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
-            border: 1px solid #e9ecef;
+            border: 1px solid rgba(0, 173, 181, 0.1);
+            transition: var(--transition);
+        }
+
+        .detail-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
         }
 
         .detail-label {
             font-size: 0.8rem;
             color: var(--gray);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.3rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
         }
 
         .detail-value {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            color: var(--dark);
+            color: var(--light);
+        }
+
+        .platform-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(0, 173, 181, 0.2);
+            color: var(--accent-light);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .genre-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(255, 187, 51, 0.2);
+            color: var(--warning);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .warning-message {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
+            background: rgba(255, 82, 82, 0.1);
+            border: 1px solid rgba(255, 82, 82, 0.3);
             border-radius: var(--border-radius);
-            padding: 1rem;
+            padding: 1.2rem;
             margin: 1.5rem 0;
             text-align: center;
+            backdrop-filter: blur(5px);
         }
 
         .warning-message i {
-            color: var(--warning);
+            color: var(--danger);
             margin-right: 0.5rem;
+        }
+
+        .warning-message strong {
+            color: var(--danger);
         }
 
         .button-group {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             justify-content: center;
-            margin-top: 2rem;
+            margin-top: 2.5rem;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 0.8rem 2rem;
+            padding: 0.9rem 2.5rem;
             border: none;
             border-radius: 25px;
             font-weight: 600;
@@ -158,45 +215,59 @@
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.8rem;
             font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-danger {
-            background: var(--danger);
+            background: linear-gradient(45deg, var(--danger), var(--danger-dark));
             color: white;
+            box-shadow: 0 4px 15px rgba(255, 82, 82, 0.4);
         }
 
         .btn-danger:hover {
-            background: #c82333;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 82, 82, 0.6);
         }
 
         .btn-secondary {
-            background: var(--gray);
+            background: linear-gradient(45deg, var(--gray), #5a5a5a);
             color: white;
         }
 
         .btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
         }
 
         .btn-outline {
             background: transparent;
-            color: var(--dark);
-            border: 2px solid var(--gray);
+            color: var(--light);
+            border: 2px solid var(--accent);
         }
 
         .btn-outline:hover {
-            background: var(--light);
-            transform: translateY(-2px);
+            background: rgba(0, 173, 181, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Animación de parpadeo para el título */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .delete-title {
+            animation: pulse 2s infinite;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
             .delete-container {
-                margin: 1rem auto;
+                margin: 2rem auto;
             }
 
             .delete-card {
@@ -204,12 +275,17 @@
             }
 
             .delete-title {
-                font-size: 1.7rem;
+                font-size: 1.8rem;
             }
 
-            .product-header {
+            .game-header {
                 flex-direction: column;
                 text-align: center;
+            }
+
+            .game-image {
+                width: 120px;
+                height: 140px;
             }
 
             .button-group {
@@ -224,15 +300,19 @@
 
         @media (max-width: 480px) {
             .delete-title {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
 
-            .product-details {
+            .game-details {
                 grid-template-columns: 1fr;
             }
 
             .warning-icon {
                 font-size: 3rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1.5rem;
             }
         }
     </style>
@@ -246,47 +326,52 @@
             </div>
 
             <!-- Título y descripción -->
-            <h1 class="delete-title">Eliminar Camiseta</h1>
+            <h1 class="delete-title">Eliminar Juego</h1>
             <p class="delete-subtitle">
-                Estás a punto de eliminar permanentemente esta camiseta del sistema. 
-                Esta acción no se puede deshacer.
+                Estás a punto de eliminar permanentemente este juego de tu colección. 
+                Esta acción no se puede deshacer y toda la información será perdida.
             </p>
 
-            <!-- Información de la camiseta a eliminar -->
-            <div class="product-preview">
-                <div class="product-header">
-                    {% if camiseta.imagen %}
-                        <img src="{{ camiseta.imagen.url }}" alt="{{ camiseta.nombre }}" class="product-image">
+            <!-- Información del juego a eliminar -->
+            <div class="game-preview">
+                <div class="game-header">
+                    {% if juego.imagen %}
+                        <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}" class="game-image">
                     {% else %}
-                        <div class="product-image" style="background: #e9ecef; display: flex; align-items: center; justify-content: center; color: var(--gray);">
-                            <i class="fas fa-tshirt" style="font-size: 2rem;"></i>
+                        <div class="game-image" style="background: linear-gradient(135deg, var(--primary-dark), var(--accent)); display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fas fa-gamepad" style="font-size: 3rem;"></i>
                         </div>
                     {% endif %}
-                    <div class="product-info">
-                        <h3>{{ camiseta.nombre }}</h3>
-                        <p><strong>Equipo:</strong> {{ camiseta.equipo }}</p>
-                        <p><strong>Temporada:</strong> {{ camiseta.temporada }}</p>
+                    <div class="game-info">
+                        <h3>{{ juego.nombre }}</h3>
+                        <p><strong>Plataforma:</strong> <span class="platform-badge">{{ juego.get_plataforma_display }}</span></p>
+                        <p><strong>Género:</strong> <span class="genre-badge">{{ juego.get_genero_display }}</span></p>
+                        <p><strong>Año:</strong> {{ juego.año_lanzamiento }}</p>
                     </div>
                 </div>
 
-                <div class="product-details">
+                <div class="game-details">
                     <div class="detail-item">
-                        <div class="detail-label">Talla</div>
-                        <div class="detail-value">{{ camiseta.talla }}</div>
+                        <div class="detail-label">Estado</div>
+                        <div class="detail-value">{{ juego.get_estado_display }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Desarrollador</div>
+                        <div class="detail-value">{{ juego.desarrollador }}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Precio</div>
-                        <div class="detail-value">${{ camiseta.precio }}</div>
+                        <div class="detail-value">${{ juego.precio }}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Estado</div>
                         <div class="detail-value">
-                            {% if camiseta.vendido %}
-                                <span style="color: var(--danger);">Vendida</span>
-                            {% elif camiseta.publicado %}
-                                <span style="color: var(--success);">Publicada</span>
+                            {% if juego.vendido %}
+                                <span style="color: var(--success); font-weight: bold;">VENDIDO</span>
+                            {% elif juego.publicado %}
+                                <span style="color: var(--accent-light); font-weight: bold;">PUBLICADO</span>
                             {% else %}
-                                <span style="color: var(--warning);">No Publicada</span>
+                                <span style="color: var(--warning); font-weight: bold;">NO PUBLICADO</span>
                             {% endif %}
                         </div>
                     </div>
@@ -296,7 +381,7 @@
             <!-- Mensaje de advertencia -->
             <div class="warning-message">
                 <i class="fas fa-exclamation-circle"></i>
-                <strong>¡Atención!</strong> Esta acción eliminará permanentemente la camiseta y toda su información.
+                <strong>¡ALERTA CRÍTICA!</strong> Esta acción eliminará permanentemente el juego y toda su información del sistema.
             </div>
 
             <!-- Formulario de eliminación -->
@@ -306,23 +391,27 @@
                 <div class="button-group">
                     <!-- Botón de confirmación -->
                     <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-trash"></i>
-                        Sí, Eliminar Camiseta
+                        <i class="fas fa-skull-crossbones"></i>
+                        CONFIRMAR ELIMINACIÓN
                     </button>
 
                     <!-- Botón de cancelar -->
                     <a href="{% url 'lista_productos' %}" class="btn btn-secondary">
-                        <i class="fas fa-times"></i>
-                        Cancelar
+                        <i class="fas fa-undo"></i>
+                        CANCELAR
                     </a>
                 </div>
             </form>
 
             <!-- Información adicional -->
-            <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e9ecef;">
+            <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
                 <p style="font-size: 0.9rem; color: var(--gray); text-align: center;">
-                    <i class="fas fa-info-circle"></i>
-                    Si la camiseta ha sido vendida, considera marcarla como "Vendida" en lugar de eliminarla.
+                    <i class="fas fa-lightbulb"></i>
+                    <strong>Sugerencia:</strong> Si el juego ha sido vendido, considera marcarlo como "Vendido" en lugar de eliminarlo.
+                </p>
+                <p style="font-size: 0.8rem; color: var(--gray); text-align: center; margin-top: 0.5rem;">
+                    <i class="fas fa-shield-alt"></i>
+                    Esta acción es irreversible y se registrará en el sistema.
                 </p>
             </div>
         </div>
@@ -335,7 +424,8 @@
             const deleteButton = document.querySelector('.btn-danger');
 
             deleteButton.addEventListener('click', function(e) {
-                if (!confirm('¿Estás completamente seguro de que deseas eliminar esta camiseta?\n\nEsta acción es irreversible.')) {
+                const gameName = '{{ juego.nombre }}';
+                if (!confirm(`🚨 CONFIRMACIÓN DE ELIMINACIÓN 🚨\n\n¿Estás completamente seguro de eliminar:\n\n"${gameName}"\n\n⚠️  Esta acción es PERMANENTE e IRREVERSIBLE`)) {
                     e.preventDefault();
                 }
             });
@@ -344,7 +434,22 @@
             deleteForm.addEventListener('submit', function(e) {
                 const submitButton = deleteForm.querySelector('button[type="submit"]');
                 submitButton.disabled = true;
-                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Eliminando...';
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ELIMINANDO...';
+                
+                // Efecto visual de eliminación
+                document.querySelector('.delete-card').style.opacity = '0.8';
+                document.querySelector('.delete-card').style.transform = 'scale(0.98)';
+            });
+
+            // Efecto de hover en los detalles del juego
+            const detailItems = document.querySelectorAll('.detail-item');
+            detailItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 0 15px rgba(0, 173, 181, 0.3)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = 'none';
+                });
             });
         });
     </script>

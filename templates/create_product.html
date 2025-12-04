@@ -1,7 +1,6 @@
-
 {% load static %}
 
-{% block title %}Crear Nueva Camiseta - FútbolShop{% endblock %}
+{% block title %}Publicar Nuevo Juego - GameTrade{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -10,8 +9,8 @@
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">
-                        <i class="fas fa-plus-circle me-2"></i>
-                        Crear Nueva Camiseta
+                        <i class="fas fa-gamepad me-2"></i>
+                        Publicar Nuevo Juego
                     </h4>
                 </div>
                 <div class="card-body">
@@ -35,10 +34,10 @@
                         {% endif %}
 
                         <div class="row">
-                            <!-- Nombre -->
-                            <div class="col-md-6 mb-3">
+                            <!-- Nombre del Juego -->
+                            <div class="col-md-8 mb-3">
                                 <label for="{{ form.nombre.id_for_label }}" class="form-label">
-                                    <i class="fas fa-tag me-1"></i>Nombre de la Camiseta *
+                                    <i class="fas fa-tag me-1"></i>Nombre del Juego *
                                 </label>
                                 {{ form.nombre }}
                                 {% if form.nombre.help_text %}
@@ -46,35 +45,57 @@
                                 {% endif %}
                             </div>
 
-                            <!-- Equipo -->
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.equipo.id_for_label }}" class="form-label">
-                                    <i class="fas fa-users me-1"></i>Equipo *
+                            <!-- Año de Lanzamiento -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.año_lanzamiento.id_for_label }}" class="form-label">
+                                    <i class="fas fa-calendar-alt me-1"></i>Año Lanzamiento *
                                 </label>
-                                {{ form.equipo }}
+                                {{ form.año_lanzamiento }}
+                                {% if form.año_lanzamiento.help_text %}
+                                <div class="form-text">{{ form.año_lanzamiento.help_text }}</div>
+                                {% endif %}
                             </div>
                         </div>
 
                         <div class="row">
-                            <!-- Temporada -->
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.temporada.id_for_label }}" class="form-label">
-                                    <i class="fas fa-calendar me-1"></i>Temporada *
+                            <!-- Plataforma -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.plataforma.id_for_label }}" class="form-label">
+                                    <i class="fas fa-tv me-1"></i>Plataforma *
                                 </label>
-                                {{ form.temporada }}
+                                {{ form.plataforma }}
                             </div>
 
-                            <!-- Talla -->
-                            <div class="col-md-6 mb-3">
-                                <label for="{{ form.talla.id_for_label }}" class="form-label">
-                                    <i class="fas fa-tshirt me-1"></i>Talla *
+                            <!-- Género -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.genero.id_for_label }}" class="form-label">
+                                    <i class="fas fa-theater-masks me-1"></i>Género *
                                 </label>
-                                {{ form.talla }}
+                                {{ form.genero }}
+                            </div>
+
+                            <!-- Estado -->
+                            <div class="col-md-4 mb-3">
+                                <label for="{{ form.estado.id_for_label }}" class="form-label">
+                                    <i class="fas fa-clipboard-check me-1"></i>Estado *
+                                </label>
+                                {{ form.estado }}
                             </div>
                         </div>
 
-                        <!-- Precio -->
                         <div class="row">
+                            <!-- Desarrollador -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.desarrollador.id_for_label }}" class="form-label">
+                                    <i class="fas fa-building me-1"></i>Desarrollador *
+                                </label>
+                                {{ form.desarrollador }}
+                                {% if form.desarrollador.help_text %}
+                                <div class="form-text">{{ form.desarrollador.help_text }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Precio -->
                             <div class="col-md-6 mb-3">
                                 <label for="{{ form.precio.id_for_label }}" class="form-label">
                                     <i class="fas fa-dollar-sign me-1"></i>Precio *
@@ -82,16 +103,6 @@
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     {{ form.precio }}
-                                </div>
-                            </div>
-
-                            <!-- Publicado -->
-                            <div class="col-md-6 mb-3">
-                                <div class="form-check form-switch mt-4">
-                                    {{ form.publicado }}
-                                    <label class="form-check-label" for="{{ form.publicado.id_for_label }}">
-                                        <i class="fas fa-eye me-1"></i>Publicar inmediatamente
-                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -102,18 +113,37 @@
                                 <i class="fas fa-align-left me-1"></i>Descripción
                             </label>
                             {{ form.descripcion }}
-                            <div class="form-text">Describe las características de la camiseta.</div>
+                            <div class="form-text">Describe el estado del juego, si tiene manual, caja original, etc.</div>
                         </div>
 
                         <!-- Imagen -->
                         <div class="mb-4">
                             <label for="{{ form.imagen.id_for_label }}" class="form-label">
-                                <i class="fas fa-image me-1"></i>Imagen de la Camiseta
+                                <i class="fas fa-image me-1"></i>Imagen del Juego
                             </label>
                             {{ form.imagen }}
                             {% if form.imagen.help_text %}
                             <div class="form-text">{{ form.imagen.help_text }}</div>
                             {% endif %}
+                            <div class="mt-2">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Recomendado: Foto frontal de la caja o del juego
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Publicado -->
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                {{ form.publicado }}
+                                <label class="form-check-label" for="{{ form.publicado.id_for_label }}">
+                                    <i class="fas fa-eye me-1"></i>Publicar inmediatamente
+                                </label>
+                                <div class="form-text">
+                                    Si desactivas esta opción, el juego quedará como borrador.
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Botones -->
@@ -122,7 +152,7 @@
                                 <i class="fas fa-arrow-left me-1"></i>Cancelar
                             </a>
                             <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save me-1"></i>Crear Camiseta
+                                <i class="fas fa-upload me-1"></i>Publicar Juego
                             </button>
                         </div>
                     </form>
@@ -159,7 +189,7 @@
     }
     
     textarea {
-        min-height: 100px;
+        min-height: 120px;
         resize: vertical;
     }
     
@@ -171,22 +201,49 @@
     .card {
         border: none;
         border-radius: 1rem;
+        background: linear-gradient(145deg, #f8f9fa, #ffffff);
     }
     
     .card-header {
         border-radius: 1rem 1rem 0 0 !important;
+        background: linear-gradient(45deg, #6a11cb, #2575fc);
     }
     
     .btn-success {
-        background: linear-gradient(45deg, #28a745, #20c997);
+        background: linear-gradient(45deg, #00b09b, #96c93d);
         border: none;
         padding: 0.75rem 2rem;
         font-weight: 600;
+        transition: all 0.3s ease;
     }
     
     .btn-success:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        box-shadow: 0 4px 15px rgba(0, 176, 155, 0.4);
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(45deg, #8e9eab, #eef2f3);
+        border: none;
+    }
+    
+    /* Estilo para selects */
+    select {
+        background-color: white;
+        cursor: pointer;
+    }
+    
+    /* Estilo para el input de archivo */
+    input[type="file"] {
+        padding: 0.5rem;
+        border: 2px dashed #dee2e6;
+        border-radius: 0.5rem;
+        background-color: #f8f9fa;
+    }
+    
+    input[type="file"]:hover {
+        border-color: #6a11cb;
+        background-color: #f0f5ff;
     }
 </style>
 
@@ -195,6 +252,39 @@
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form');
         const requiredFields = form.querySelectorAll('input[required], select[required], textarea[required]');
+        
+        // Validar año de lanzamiento
+        const añoInput = document.getElementById('{{ form.año_lanzamiento.id_for_label }}');
+        if (añoInput) {
+            añoInput.addEventListener('blur', function() {
+                const año = parseInt(this.value);
+                const añoActual = new Date().getFullYear();
+                
+                if (año < 1970 || año > añoActual + 1) {
+                    this.style.borderColor = '#dc3545';
+                    alert(`Por favor ingresa un año válido (1970-${añoActual + 1})`);
+                } else if (this.value.trim()) {
+                    this.style.borderColor = '#28a745';
+                }
+            });
+        }
+        
+        // Validar precio
+        const precioInput = document.getElementById('{{ form.precio.id_for_label }}');
+        if (precioInput) {
+            precioInput.addEventListener('blur', function() {
+                const precio = parseFloat(this.value);
+                if (precio < 0) {
+                    this.style.borderColor = '#dc3545';
+                    alert('El precio no puede ser negativo');
+                } else if (precio > 10000) {
+                    this.style.borderColor = '#ffc107';
+                    // Solo advertencia, no error
+                } else if (this.value.trim()) {
+                    this.style.borderColor = '#28a745';
+                }
+            });
+        }
         
         form.addEventListener('submit', function(e) {
             let isValid = true;
@@ -212,6 +302,17 @@
                     field.style.borderColor = '#28a745';
                 }
             });
+            
+            // Validación específica para año
+            if (añoInput && añoInput.value.trim()) {
+                const año = parseInt(añoInput.value);
+                const añoActual = new Date().getFullYear();
+                if (año < 1970 || año > añoActual + 1) {
+                    isValid = false;
+                    añoInput.style.borderColor = '#dc3545';
+                    if (!firstInvalidField) firstInvalidField = añoInput;
+                }
+            }
             
             if (!isValid) {
                 e.preventDefault();
@@ -237,8 +338,22 @@
             imageInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    // Aquí podrías agregar previsualización de imagen
-                    console.log('Imagen seleccionada:', file.name);
+                    // Validar tipo de archivo
+                    const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Por favor sube una imagen (JPEG, PNG, GIF)');
+                        this.value = '';
+                        return;
+                    }
+                    
+                    // Validar tamaño (máximo 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('La imagen es muy grande. Máximo 5MB');
+                        this.value = '';
+                        return;
+                    }
+                    
+                    console.log('Imagen válida seleccionada:', file.name);
                 }
             });
         }
