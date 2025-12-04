@@ -1,285 +1,817 @@
 {% extends 'includes/navbar.html' %}
 {% load static %}
 
-{% block title %}Inicio - FútbolShop - Camisetas Oficiales{% endblock %}
+{% block title %}Juegos - Arcade{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section bg-dark text-white py-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">
-                    Las Mejores <span class="text-warning">Camisetas</span> de Fútbol
-                </h1>
-                <p class="lead mb-4">
-                    Descubre nuestra colección exclusiva de camisetas oficiales de los equipos más importantes del mundo. 
-                    Calidad garantizada y envíos a todo el país.
-                </p>
-                <div class="d-flex gap-3 flex-wrap">
-                    <a href="{% url 'lista_productos' %}" class="btn btn-warning btn-lg">
-                        <i class="fas fa-shopping-bag me-2"></i>Ver Colección
-                    </a>
-                    {% if user.is_staff %}
-                    <a href="{% url 'camiseta_create' %}" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-plus me-2"></i>Agregar Camiseta
-                    </a>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="col-lg-6 text-center">
-                <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-                     alt="Camisetas de fútbol" class="img-fluid rounded-3 shadow-lg">
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Estadísticas -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <i class="fas fa-tshirt fa-3x text-primary mb-3"></i>
-                    <h3 class="fw-bold">{{ total_camisetas }}</h3>
-                    <p class="text-muted">Camisetas Disponibles</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <i class="fas fa-users fa-3x text-success mb-3"></i>
-                    <h3 class="fw-bold">{{ total_equipos }}</h3>
-                    <p class="text-muted">Equipos Diferentes</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <i class="fas fa-truck fa-3x text-info mb-3"></i>
-                    <h3 class="fw-bold">24/7</h3>
-                    <p class="text-muted">Envíos Express</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="stat-card">
-                    <i class="fas fa-star fa-3x text-warning mb-3"></i>
-                    <h3 class="fw-bold">4.9/5</h3>
-                    <p class="text-muted">Calificación</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Camisetas Destacadas -->
-<section class="py-5">
-    <div class="container">
-        <div class="row mb-4">
-            <div class="col">
-                <h2 class="text-center fw-bold mb-3">Camisetas Destacadas</h2>
-                <p class="text-center text-muted lead">Las camisetas más populares de nuestra colección</p>
-            </div>
-        </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos - Arcade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset y estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
-        <div class="row">
-            {% for camiseta in Camisetas %}
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <div class="position-relative">
-                        {% if camiseta.imagen %}
-                        <img src="{{ camiseta.imagen.url }}" class="card-img-top" alt="{{ camiseta.nombre }}" style="height: 250px; object-fit: cover;">
-                        {% else %}
-                        <img src="https://images.unsplash.com/photo-1521334884684-d80222895322?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
-                             class="card-img-top" alt="Camiseta default" style="height: 250px; object-fit: cover;">
-                        {% endif %}
-                        {% if camiseta.vendido %}
-                        <span class="position-absolute top-0 start-0 m-2 badge bg-danger">Vendido</span>
-                        {% elif not camiseta.publicado %}
-                        <span class="position-absolute top-0 start-0 m-2 badge bg-secondary">No publicado</span>
-                        {% else %}
-                        <span class="position-absolute top-0 start-0 m-2 badge bg-success">Disponible</span>
-                        {% endif %}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+            line-height: 1.6;
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero/Banner con carousel horizontal */
+        .hero {
+            background: linear-gradient(135deg, #5d6d7e 0%, #34495e 100%);
+            color: #ffffff;
+            padding: 180px 0 120px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .hero-slides-wrapper {
+            display: flex;
+            width: 400%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hero-slide {
+            width: 25%;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 35px;
+            color: #ecf0f1;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+        
+        .btn-primary {
+            background-color: #ffffff;
+            color: #2c3e50;
+            padding: 16px 35px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 1.1rem;
+            border: 2px solid transparent;
+        }
+        
+        .btn-primary:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: #bdc3c7;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: #ffffff;
+            padding: 16px 35px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid #ffffff;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Indicadores del carousel */
+        .carousel-indicators {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+            margin-top: 20px;
+        }
+        
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .carousel-indicator.active {
+            background-color: #ffffff;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Sección: Impulsa Tu Proyecto (Nueva) */
+        .project-section {
+            background-color: #ffffff;
+            padding: 80px 0;
+            border-top: 1px solid #ecf0f1;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .project-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+        
+        .project-image {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .project-image-placeholder {
+            height: 350px;
+            background: linear-gradient(135deg, #ecf0f1 0%, #dfe6e9 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            color: #95a5a6;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        .project-info {
+            flex: 1.2;
+        }
+        
+        .project-info h2 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .project-info p {
+            color: #5d6d7e;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+        
+        .project-features {
+            margin-top: 30px;
+        }
+        
+        .project-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #95a5a6;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 1px solid #ecf0f1;
+        }
+        
+        .feature-content h4 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .feature-content p {
+            color: #7f8c8d;
+            margin-bottom: 0;
+            font-size: 1rem;
+        }
+        
+        .project-cta {
+            margin-top: 40px;
+        }
+        
+        .btn-project {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #95a5a6;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            font-size: 1.1rem;
+        }
+        
+        .btn-project:hover {
+            background-color: #7f8c8d;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(149, 165, 166, 0.2);
+        }
+        
+        /* Contenido principal */
+        .main-content {
+            padding: 80px 0;
+            background-color: #f5f7fa;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #95a5a6;
+            border-radius: 2px;
+        }
+        
+        .section-title p {
+            color: #7f8c8d;
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        /* Tarjetas de juegos */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .game-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-color: #bdc3c7;
+        }
+        
+        .game-image {
+            height: 200px;
+            background: linear-gradient(135deg, #ecf0f1 0%, #dfe6e9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #7f8c8d;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .game-content {
+            padding: 25px;
+        }
+        
+        .game-content h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .game-content p {
+            color: #5d6d7e;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .game-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #95a5a6;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        /* Sección de características */
+        .features {
+            background-color: #ffffff;
+            padding: 80px 0;
+            border-top: 1px solid #ecf0f1;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 25px;
+            transition: transform 0.3s;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3.2rem;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            transition: color 0.3s;
+        }
+        
+        .feature-item:hover .feature-icon {
+            color: #5d6d7e;
+        }
+        
+        .feature-item h3 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .feature-item p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h2 {
+                font-size: 2.3rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .project-content {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .project-image {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 150px 0 100px;
+                min-height: 500px;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+                text-align: center;
+                padding: 14px 25px;
+            }
+            
+            .main-content, .features, .project-section {
+                padding: 60px 0;
+            }
+            
+            .project-info h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .project-image-placeholder {
+                height: 250px;
+                font-size: 6rem;
+            }
+            
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Banner/Hero con Carousel Horizontal -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-slides-wrapper" id="heroSlidesWrapper">
+                <!-- Slide 1 -->
+                <div class="hero-slide" id="slide-1">
+                    <h2>Descubre Juegos Increíbles</h2>
+                    <p>Explora nuestra colección de juegos indie, proyectos estudiantiles y creaciones de desarrolladores emergentes. Encuentra tu próximo juego favorito.</p>
+                    <div class="hero-buttons">
+                        <a href="#featured-games" class="btn-primary">Ver Juegos Destacados</a>
+                        <a href="#features" class="btn-secondary">Conoce la Comunidad</a>
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">{{ camiseta.nombre }}</h5>
-                        <p class="card-text text-muted">{{ camiseta.equipo }} - {{ camiseta.temporada }}</p>
-                        <div class="mt-auto">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="h5 text-primary mb-0">${{ camiseta.precio }}</span>
-                                <span class="badge bg-light text-dark border">{{ camiseta.talla }}</span>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div class="hero-slide" id="slide-2">
+                    <h2>Conecta con Desarrolladores</h2>
+                    <p>Comparte tus proyectos, recibe feedback de la comunidad y colabora con otros apasionados de los videojuegos. Juntos creamos experiencias únicas.</p>
+                    <div class="hero-buttons">
+                        <a href="#featured-games" class="btn-primary">Explorar Proyectos</a>
+                        <a href="#features" class="btn-secondary">Unirse a la Comunidad</a>
+                    </div>
+                </div>
+                
+                <!-- Slide 3 -->
+                <div class="hero-slide" id="slide-3">
+                    <h2>Participa en Concursos</h2>
+                    <p>Demuestra tu talento en nuestros concursos mensuales y gana premios increíbles. Desde juegos indie hasta proyectos experimentales, ¡todo tiene su lugar!</p>
+                    <div class="hero-buttons">
+                        <a href="#featured-games" class="btn-primary">Ver Concursos Activos</a>
+                        <a href="#features" class="btn-secondary">Reglas y Premios</a>
+                    </div>
+                </div>
+                
+                <!-- Slide 4 -->
+                <div class="hero-slide" id="slide-4">
+                    <h2>Impulsa Tu Proyecto</h2>
+                    <p>¿Eres desarrollador? Arcade ofrece todas las herramientas necesarias para lanzar y promocionar tu juego. Lleva tu visión al siguiente nivel con nosotros.</p>
+                    <div class="hero-buttons">
+                        <a href="#project-section" class="btn-primary">Saber Más</a>
+                        <a href="#features" class="btn-secondary">Comenzar Ahora</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Indicadores del carousel -->
+            <div class="carousel-indicators">
+                <div class="carousel-indicator active" data-slide="0"></div>
+                <div class="carousel-indicator" data-slide="1"></div>
+                <div class="carousel-indicator" data-slide="2"></div>
+                <div class="carousel-indicator" data-slide="3"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Nueva Sección: Impulsa Tu Proyecto -->
+    <section class="project-section" id="project-section">
+        <div class="container">
+            <div class="project-content">
+                <div class="project-image">
+                    <div class="project-image-placeholder">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h2>Impulsa Tu Propio Proyecto</h2>
+                    <p>Si eres desarrollador, Arcade ofrece todas las herramientas necesarias para lanzar y promocionar tu juego. Desde sistemas de monetización hasta análisis detallados de jugadores, te ayudamos a llevar tu visión al siguiente nivel.</p>
+                    <p>Participa en nuestros concursos regulares donde podrás ganar premios y obtener exposición internacional. Conecta con inversores, recibe mentoring de expertos y forma parte de una comunidad que valora la innovación.</p>
+                    
+                    <div class="project-features">
+                        <div class="project-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
                             </div>
-                            <div class="d-grid gap-2 mt-3">
-                                <a href="{% url 'camiseta_detail' camiseta.pk %}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-eye me-1"></i>Ver Detalles
-                                </a>
-                                {% if user.is_staff %}
-                                <a href="{% url 'camiseta_update' camiseta.pk %}" class="btn btn-outline-warning btn-sm">
-                                    <i class="fas fa-edit me-1"></i>Editar
-                                </a>
-                                {% endif %}
+                            <div class="feature-content">
+                                <h4>Analíticas Avanzadas</h4>
+                                <p>Accede a datos detallados sobre el rendimiento de tu juego y el comportamiento de los jugadores.</p>
                             </div>
+                        </div>
+                        
+                        <div class="project-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Concursos y Premios</h4>
+                                <p>Participa en competencias mensuales con premios en efectivo y oportunidades de publicación.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="project-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="feature-content">
+                                <h4>Networking Profesional</h4>
+                                <p>Conecta con otros desarrolladores, inversores y profesionales de la industria.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-cta">
+                        <a href="#" class="btn-project">
+                            <i class="fas fa-play-circle"></i> Comenzar Mi Proyecto
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-title" id="featured-games">
+                <h2>Juegos Destacados</h2>
+                <p>Las mejores creaciones compartidas por nuestra comunidad de desarrolladores.</p>
+            </div>
+            
+            <div class="games-grid">
+                <!-- Juego 1 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <i class="fas fa-dragon"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3>Dragon's Legacy</h3>
+                        <p>Un RPG de fantasía con combate táctico por turnos y un mundo abierto por explorar. Desarrollado por un equipo indie de 3 personas.</p>
+                        <div class="game-meta">
+                            <span><i class="fas fa-tag"></i> RPG</span>
+                            <span><i class="fas fa-user"></i> IndieDevTeam</span>
+                            <span><i class="far fa-calendar"></i> 05/11</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Juego 2 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3>Neon Synapse</h3>
+                        <p>Puzzle game ciberpunk con mecánicas de sigilo y hackeo. Con más de 50 niveles desafiantes y una narrativa intrigante.</p>
+                        <div class="game-meta">
+                            <span><i class="fas fa-tag"></i> Puzzle</span>
+                            <span><i class="fas fa-user"></i> CyberGames</span>
+                            <span><i class="far fa-calendar"></i> 22/10</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Juego 3 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="game-content">
+                        <h3>Desert Drifters</h3>
+                        <p>Carreras arcade en arenas del desierto con vehículos personalizables y modos multijugador online. Física realista y gráficos stylized.</p>
+                        <div class="game-meta">
+                            <span><i class="fas fa-tag"></i> Carreras</span>
+                            <span><i class="fas fa-user"></i> SpeedDev</span>
+                            <span><i class="far fa-calendar"></i> 15/10</span>
                         </div>
                     </div>
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center py-5">
-                <i class="fas fa-tshirt fa-4x text-muted mb-3"></i>
-                <h4 class="text-muted">No hay camisetas destacadas</h4>
-                <p class="text-muted">Agrega algunas camisetas para que aparezcan aquí.</p>
-                {% if user.is_staff %}
-                <a href="{% url 'camiseta_create' %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i>Agregar Primera Camiseta
-                </a>
-                {% endif %}
+        </div>
+    </main>
+    
+    <!-- Sección de características -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestra Comunidad</h2>
+                <p>Conecta con miles de jugadores y desarrolladores apasionados por los videojuegos.</p>
             </div>
-            {% endfor %}
-        </div>
-        
-        <div class="text-center mt-4">
-            <a href="{% url 'lista_productos' %}" class="btn btn-outline-primary btn-lg">
-                <i class="fas fa-list me-2"></i>Ver Todas las Camisetas
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Categorías -->
-<section class="py-5 bg-dark text-white">
-    <div class="container">
-        <h2 class="text-center fw-bold mb-5">Encuentra por Categoría</h2>
-        <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="text-center">
-                    <div class="category-icon bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                         style="width: 80px; height: 80px;">
-                        <i class="fas fa-trophy fa-2x"></i>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
                     </div>
-                    <h4>Ligas Top</h4>
-                    <p class="text-muted">Premier League, La Liga, Serie A, Bundesliga</p>
+                    <h3>Comunidad Activa</h3>
+                    <p>Más de 50,000 jugadores activos explorando y jugando a diario.</p>
                 </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="text-center">
-                    <div class="category-icon bg-success rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                         style="width: 80px; height: 80px;">
-                        <i class="fas fa-globe-americas fa-2x"></i>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-star"></i>
                     </div>
-                    <h4>Selecciones</h4>
-                    <p class="text-muted">Camisetas nacionales de todo el mundo</p>
+                    <h3>Juegos Calificados</h3>
+                    <p>Sistema de valoraciones y reseñas para encontrar los mejores juegos.</p>
                 </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="text-center">
-                    <div class="category-icon bg-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                         style="width: 80px; height: 80px;">
-                        <i class="fas fa-history fa-2x"></i>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
                     </div>
-                    <h4>Ediciones Especiales</h4>
-                    <p class="text-muted">Third kits y ediciones retro</p>
+                    <h3>Concursos Mensuales</h3>
+                    <p>Participa en nuestros concursos y gana premios increíbles.</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Foros Activos</h3>
+                    <p>Discute estrategias, comparte tips y conecta con otros jugadores.</p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<!-- Newsletter -->
-<section class="py-5 bg-primary text-white">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h3 class="fw-bold">¡No te pierdas las novedades!</h3>
-                <p class="mb-0">Suscríbete para recibir ofertas exclusivas y nuevos lanzamientos.</p>
-            </div>
-            <div class="col-md-6">
-                <div class="input-group input-group-lg">
-                    <input type="email" class="form-control" placeholder="Tu correo electrónico">
-                    <button class="btn btn-warning" type="button">
-                        <i class="fas fa-paper-plane me-1"></i>Suscribirse
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<style>
-    .hero-section {
-        background: linear-gradient(135deg, #1a2a6c 0%, #2c3e50 50%, #34495e 100%);
-    }
+    </section>
     
-    .stat-card {
-        padding: 2rem 1rem;
-        transition: transform 0.3s ease;
-    }
-    
-    .stat-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 1rem;
-    }
-    
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
-    }
-    
-    .category-icon {
-        transition: transform 0.3s ease;
-    }
-    
-    .category-icon:hover {
-        transform: scale(1.1);
-    }
-    
-    .btn {
-        border-radius: 0.75rem;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .btn:hover {
-        transform: translateY(-2px);
-    }
-</style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Animación de contadores (si se implementan)
-        const counters = document.querySelectorAll('.stat-card h3');
-        counters.forEach(counter => {
-            const target = parseInt(counter.textContent);
-            if (!isNaN(target)) {
-                animateCounter(counter, target);
+    <script>
+        // Interactividad para el carousel horizontal del hero
+        document.addEventListener('DOMContentLoaded', function() {
+            // Variables del carousel
+            let currentSlide = 0;
+            const slidesWrapper = document.getElementById('heroSlidesWrapper');
+            const indicators = document.querySelectorAll('.carousel-indicator');
+            const totalSlides = 4;
+            let slideInterval;
+            
+            // Función para cambiar de slide con desplazamiento horizontal
+            function goToSlide(n) {
+                currentSlide = (n + totalSlides) % totalSlides;
+                const translateX = -currentSlide * 25;
+                slidesWrapper.style.transform = `translateX(${translateX}%)`;
+                
+                indicators.forEach((indicator, index) => {
+                    if (index === currentSlide) {
+                        indicator.classList.add('active');
+                    } else {
+                        indicator.classList.remove('active');
+                    }
+                });
             }
-        });
-        
-        function animateCounter(element, target) {
-            let current = 0;
-            const increment = target / 100;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    element.textContent = target;
-                    clearInterval(timer);
-                } else {
-                    element.textContent = Math.floor(current);
-                }
-            }, 20);
-        }
-        
-        // Smooth scroll para botones
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+            
+            function nextSlide() {
+                goToSlide(currentSlide + 1);
+            }
+            
+            function startCarousel() {
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+            
+            function stopCarousel() {
+                clearInterval(slideInterval);
+            }
+            
+            // Configurar indicadores
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    stopCarousel();
+                    goToSlide(index);
+                    startCarousel();
+                });
+            });
+            
+            // Pausar carousel al pasar el mouse
+            const hero = document.querySelector('.hero');
+            hero.addEventListener('mouseenter', stopCarousel);
+            hero.addEventListener('mouseleave', startCarousel);
+            
+            // Iniciar carousel
+            startCarousel();
+            
+            // Efecto de scroll suave para enlaces internos
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Efecto hover en tarjetas de juegos
+            const gameCards = document.querySelectorAll('.game-card');
+            gameCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                    this.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.1)';
+                    this.style.borderColor = '#bdc3c7';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.05)';
+                    this.style.borderColor = '#e0e0e0';
+                });
+            });
+            
+            // Simular clic en tarjetas de juegos
+            gameCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const gameTitle = this.querySelector('h3').textContent;
+                    alert(`Cargando información de "${gameTitle}"...\n\nEn una implementación real, esto llevaría a la página detallada del juego.`);
                 });
             });
         });
-    });
-</script>
+    </script>
+</body>
+</html>
 {% endblock %}

@@ -1,204 +1,565 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Fútbol Shop - Camisetas Oficiales{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Navbar - Arcade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.5rem;
+        /* Estilos generales para la navbar */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .logo-text {
-            color: #ff6b00;
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            padding: 20px;
         }
-        .nav-link {
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: #ff6b00 !important;
-        }
-        .btn-custom {
-            background: linear-gradient(45deg, #ff6b00, #ff8c00);
-            border: none;
-            color: white;
-            font-weight: bold;
-            transition: transform 0.3s ease;
-        }
-        .btn-custom:hover {
-            transform: translateY(-2px);
-            color: white;
-        }
+        
+        /* Navbar principal */
         .navbar {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            background: white !important;
+            background-color: #34495e;
+            padding: 0 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid #95a5a6;
         }
-        .user-welcome {
-            color: #2c3e50;
-            font-weight: 500;
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 70px;
         }
-        .futbol-icon {
-            color: #ff6b00;
-            animation: bounce 2s infinite;
+        
+        /* Logo */
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
         }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-5px);}
-            60% {transform: translateY(-3px);}
+        
+        .logo-icon {
+            font-size: 2rem;
+            color: #ecf0f1;
+            margin-right: 10px;
         }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        
+        .logo-text span {
+            color: #ecf0f1;
+        }
+        
+        /* Menú de navegación */
+        .navbar-menu {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .navbar-item {
+            position: relative;
+        }
+        
+        .navbar-link {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 10px 18px;
+            display: block;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+        
+        .navbar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        
+        .navbar-link i {
+            margin-right: 8px;
+            font-size: 1.1rem;
+        }
+        
+        /* Botones de autenticación */
+        .navbar-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .btn-login {
+            background-color: transparent;
+            color: #ecf0f1;
+            border: 2px solid #ecf0f1;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn-login:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(236, 240, 241, 0.2);
+        }
+        
+        .btn-register {
+            background-color: #7f8c8d;
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(127, 140, 141, 0.2);
+        }
+        
+        .btn-register:hover {
+            background-color: #95a5a6;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(127, 140, 141, 0.3);
+        }
+        
+        /* Botón de cerrar sesión */
+        .btn-logout {
+            background-color: transparent;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn-logout:hover {
+            background-color: #e74c3c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+        
+        /* Información del usuario */
+        .user-info {
+            color: #ecf0f1;
+            padding: 0 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .user-info i {
+            color: #95a5a6;
+        }
+        
+        /* Formulario de logout */
         .logout-form {
+            margin: 0;
+            padding: 0;
             display: inline;
         }
-        .logout-btn {
+        
+        .logout-form button {
             background: none;
             border: none;
-            color: #dc3545;
-            padding: 0;
+            color: inherit;
+            font: inherit;
             cursor: pointer;
-            width: 100%;
-            text-align: left;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .logout-btn:hover {
-            color: #c82333;
+        
+        /* Menú hamburguesa para móviles */
+        .navbar-toggle {
+            display: none;
             background: none;
+            border: none;
+            color: #ecf0f1;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        /* Indicador de página activa */
+        .active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff !important;
+        }
+        
+        .active:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar-toggle {
+                display: block;
+            }
+            
+            .navbar-menu {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: #2c3e50;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                z-index: 1000;
+            }
+            
+            .navbar-menu.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .navbar-item {
+                width: 100%;
+                margin: 5px 0;
+            }
+            
+            .navbar-link {
+                padding: 12px 20px;
+                margin: 0;
+                width: 100%;
+            }
+            
+            .navbar-buttons {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 15px;
+                align-items: flex-start;
+            }
+            
+            .btn-login, .btn-register, .btn-logout {
+                width: 100%;
+                justify-content: center;
+                margin: 5px 0;
+            }
+            
+            .user-info {
+                width: 100%;
+                justify-content: center;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+        }
+        
+        /* Footer actualizado con la misma paleta */
+        .footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 70px 0 30px;
+            border-top: 4px solid #95a5a6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            color: #ffffff;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #95a5a6;
+            border-radius: 2px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: #bdc3c7;
+            margin-right: 20px;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .social-links a:hover {
+            color: #ffffff;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+
+        /* Contenido de ejemplo */
+        .content {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            color: #5d6d7e;
+            line-height: 1.6;
         }
     </style>
-    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <!-- Logo con bola de fútbol -->
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-futbol futbol-icon me-2"></i>
-                <span class="logo-text">Fútbol</span>Shop
+    <!-- Navbar completa con funcionalidad -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <a href="#" class="navbar-logo">
+                <div class="logo-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <div class="logo-text">Arc<span>ade</span></div>
             </a>
-
-            <!-- Botón hamburguesa para móviles -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            
+            <!-- Menú hamburguesa (solo móviles) -->
+            <button class="navbar-toggle" id="navbarToggle">
+                <i class="fas fa-bars"></i>
             </button>
-
-            <!-- Elementos del navbar -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'inicio' %}active{% endif %}" href="#">
-                            <i class="fas fa-home me-1"></i>Inicio
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'camisetas' %}active{% endif %}" href="#">
-                            <i class="fas fa-tshirt me-1"></i>Camisetas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'camisetas' %}active{% endif %}" href="{% url 'camiseta_create' %}">
-                            <i class="fas fa-tshirt me-1"></i>Crear
-                        </a>
-                    </li>
-                    {% if user.is_authenticated and user.is_staff %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'crear_camiseta' %}active{% endif %}" href="{% url ' camiseta_create ' %}">
-                            <i class="fas fa-plus me-1"></i>Crear
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-
-                <!-- Elementos de autenticación -->
-                <ul class="navbar-nav ms-auto">
+            
+            <!-- Menú de navegación -->
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="navbar-item">
+                    <a href="{% url 'lista_productos' %}" class="navbar-link active">
+                        <i class="fas fa-home"></i> Inicio
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link">
+                        <i class="fas fa-upload"></i> Subir Juego
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="{% url 'catalog' %}" class="navbar-link">
+                        <i class="fas fa-compass"></i> Explorar
+                    </a>
+                </li>
+                
+                <!-- Botones de autenticación - CON LÓGICA CONDICIONAL -->
+                <div class="navbar-buttons">
                     {% if user.is_authenticated %}
-                        <!-- Usuario autenticado -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user me-1"></i>
-                                <span class="user-welcome">Hola, {{ user.username }}</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-user-circle me-2"></i>Mi Perfil
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-shopping-cart me-2"></i>Mis Pedidos
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider"></li>
-                                
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'crear_camiseta' %}">
-                                        <i class="fas fa-plus me-2"></i>Agregar Camiseta
-                                    </a>
-                                </li>
-                                
-                                <li>
-                                    <form method="post" action="{% url 'logout' %}" class="logout-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="dropdown-item logout-btn">
-                                            <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
+                        <!-- Usuario autenticado: Mostrar info y botón de logout -->
+                        <div class="user-info">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Hola, {{ user.username }}</span>
+                        </div>
+                        
+                        <form method="post" action="{% url 'logout' %}" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-logout">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </button>
+                        </form>
                     {% else %}
-                        <!-- Usuario no autenticado -->
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="#">
-                                <i class="fas fa-sign-in-alt me-1"></i>Login
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-
-                <!-- Carrito de compras -->
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="#">
-                            <i class="fas fa-shopping-cart fa-lg"></i>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                0
-                            </span>
+                        <!-- Usuario NO autenticado: Mostrar login y register -->
+                        <a href='{% url "login" %}' class="btn-login">
+                            <i class="fas fa-sign-in-alt"></i> Ingresar
                         </a>
-                    </li>
-                </ul>
-            </div>
+                        <a href="{% url 'signup' %}" class="btn-register">
+                            <i class="fas fa-user-plus"></i> Registrar
+                        </a>
+                    {% endif %}
+                </div>
+            </ul>
         </div>
     </nav>
-
+  
     {% block content %}
+
     {% endblock %}
-    <!-- Mensajes -->
-    {% if messages %}
-    <div class="container mt-3">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
 
-
-    <!-- Footer básico -->
-    <footer class="bg-dark text-light mt-5 py-4">
-        <div class="container text-center">
-            <p>&copy; 2024 FútbolShop - Tienda oficial de camisetas de fútbol. Todos los derechos reservados.</p>
+    <!-- Footer actualizado -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Arcade</h3>
+                    <p>La plataforma líder para descubrir y jugar a los mejores juegos indie de la comunidad.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-twitch"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Enlaces Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-home"></i> Inicio</a></li>
+                        <li><a href="#featured-games"><i class="fas fa-gamepad"></i> Juegos Destacados</a></li>
+                        <li><a href="#"><i class="fas fa-fire"></i> Tendencias</a></li>
+                        <li><a href="#"><i class="fas fa-trophy"></i> Concursos</a></li>
+                        <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Categorías</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-dragon"></i> RPG</a></li>
+                        <li><a href="#"><i class="fas fa-running"></i> Acción</a></li>
+                        <li><a href="#"><i class="fas fa-puzzle-piece"></i> Puzzle</a></li>
+                        <li><a href="#"><i class="fas fa-chess-board"></i> Estrategia</a></li>
+                        <li><a href="#"><i class="fas fa-car"></i> Carreras</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> contacto@arcade.com</li>
+                        <li><i class="fas fa-phone"></i> +34 912 345 678</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Madrid, España</li>
+                        <li><a href="#"><i class="fas fa-shield-alt"></i> Política de privacidad</a></li>
+                        <li><a href="#"><i class="fas fa-file-contract"></i> Términos y condiciones</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Arcade. Todos los derechos reservados. | Plataforma de descubrimiento de juegos indie</p>
+            </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    {% block extra_js %}{% endblock %}
+    <script>
+        // Script para el menú hamburguesa
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggle = document.getElementById('navbarToggle');
+            const navbarMenu = document.getElementById('navbarMenu');
+            
+            if (navbarToggle && navbarMenu) {
+                navbarToggle.addEventListener('click', function() {
+                    navbarMenu.classList.toggle('active');
+                    
+                    const icon = this.querySelector('i');
+                    if (navbarMenu.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+                
+                const navbarLinks = document.querySelectorAll('.navbar-link');
+                navbarLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        navbarMenu.classList.remove('active');
+                        const icon = navbarToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    });
+                });
+                
+                document.addEventListener('click', function(event) {
+                    if (!navbarMenu.contains(event.target) && !navbarToggle.contains(event.target)) {
+                        navbarMenu.classList.remove('active');
+                        const icon = navbarToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+            
+            const currentPage = window.location.hash || '#inicio';
+            const links = document.querySelectorAll('.navbar-link');
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
-
