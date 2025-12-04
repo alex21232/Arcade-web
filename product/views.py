@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Juego  # Cambiamos Camiseta por Juego
+from .models import Juego
 
 class ListProductView(ListView):
     model = Juego
